@@ -1,19 +1,17 @@
 package redis.clients.jedis;
 
-import java.util.Set;
-import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-import redis.clients.jedis.annots.Experimental;
 import redis.clients.jedis.builders.SentinelClientBuilder;
 import redis.clients.jedis.csc.Cache;
-import redis.clients.jedis.csc.CacheConfig;
-import redis.clients.jedis.csc.CacheFactory;
+
 import redis.clients.jedis.executors.CommandExecutor;
 import redis.clients.jedis.providers.ConnectionProvider;
 import redis.clients.jedis.providers.SentineledConnectionProvider;
 
 public class RedisSentinelClient extends UnifiedJedis {
 
-  private RedisSentinelClient(CommandExecutor commandExecutor, ConnectionProvider connectionProvider, CommandObjects commandObjects, RedisProtocol redisProtocol, Cache cache) {
+  private RedisSentinelClient(CommandExecutor commandExecutor,
+      ConnectionProvider connectionProvider, CommandObjects commandObjects,
+      RedisProtocol redisProtocol, Cache cache) {
     super(commandExecutor, connectionProvider, commandObjects, redisProtocol, cache);
   }
 
@@ -27,14 +25,13 @@ public class RedisSentinelClient extends UnifiedJedis {
 
     @Override
     protected RedisSentinelClient createClient() {
-      return new RedisSentinelClient(commandExecutor, connectionProvider, commandObjects, clientConfig.getRedisProtocol(),
-          cache);
+      return new RedisSentinelClient(commandExecutor, connectionProvider, commandObjects,
+          clientConfig.getRedisProtocol(), cache);
     }
   }
 
   /**
    * Create a new builder for configuring RedisSentinelClient instances.
-   *
    * @return a new {@link RedisSentinelClient.Builder} instance
    */
   public static Builder builder() {
@@ -50,4 +47,3 @@ public class RedisSentinelClient extends UnifiedJedis {
     return (Pipeline) super.pipelined();
   }
 }
-

@@ -28,35 +28,46 @@ public class RedisClusterClient extends UnifiedJedis {
   public static final int DEFAULT_MAX_ATTEMPTS = 5;
 
   /**
-   * Creates a RedisClusterClient instance. The provided node is used to make the first contact with the cluster.
+   * Creates a RedisClusterClient instance. The provided node is used to make the first contact with
+   * the cluster.
    * <p>
-   * Here, the default timeout of {@value redis.clients.jedis.RedisClusterClient#DEFAULT_TIMEOUT} ms is being used with
-   * {@value redis.clients.jedis.RedisClusterClient#DEFAULT_MAX_ATTEMPTS} maximum attempts.
+   * Here, the default timeout of {@value redis.clients.jedis.RedisClusterClient#DEFAULT_TIMEOUT} ms
+   * is being used with {@value redis.clients.jedis.RedisClusterClient#DEFAULT_MAX_ATTEMPTS} maximum
+   * attempts.
    * @param node Node to first connect to.
    */
   public RedisClusterClient(HostAndPort node) {
-    super(new ClusterConnectionProvider(Collections.singleton(node), DefaultJedisClientConfig.builder().timeoutMillis(DEFAULT_TIMEOUT).build()),
+    super(
+        new ClusterConnectionProvider(Collections.singleton(node),
+            DefaultJedisClientConfig.builder().timeoutMillis(DEFAULT_TIMEOUT).build()),
         DEFAULT_MAX_ATTEMPTS, Duration.ofMillis((long) DEFAULT_TIMEOUT * DEFAULT_MAX_ATTEMPTS));
   }
 
   /**
    * Creates a RedisClusterClient with multiple entry points.
    * <p>
-   * Here, the default timeout of {@value redis.clients.jedis.RedisClusterClient#DEFAULT_TIMEOUT} ms is being used with
-   * {@value redis.clients.jedis.RedisClusterClient#DEFAULT_MAX_ATTEMPTS} maximum attempts.
+   * Here, the default timeout of {@value redis.clients.jedis.RedisClusterClient#DEFAULT_TIMEOUT} ms
+   * is being used with {@value redis.clients.jedis.RedisClusterClient#DEFAULT_MAX_ATTEMPTS} maximum
+   * attempts.
    * @param nodes Nodes to connect to.
    */
   public RedisClusterClient(Set<HostAndPort> nodes) {
-    super(new ClusterConnectionProvider(nodes, DefaultJedisClientConfig.builder().timeoutMillis(DEFAULT_TIMEOUT).build()),
+    super(
+        new ClusterConnectionProvider(nodes,
+            DefaultJedisClientConfig.builder().timeoutMillis(DEFAULT_TIMEOUT).build()),
         DEFAULT_MAX_ATTEMPTS, Duration.ofMillis((long) DEFAULT_TIMEOUT * DEFAULT_MAX_ATTEMPTS));
   }
 
   public RedisClusterClient(Set<HostAndPort> nodes, String user, String password) {
-    super(new ClusterConnectionProvider(nodes, DefaultJedisClientConfig.builder().user(user).password(password).build()),
-        DEFAULT_MAX_ATTEMPTS, Duration.ofMillis((long) Protocol.DEFAULT_TIMEOUT * DEFAULT_MAX_ATTEMPTS));
+    super(
+        new ClusterConnectionProvider(nodes,
+            DefaultJedisClientConfig.builder().user(user).password(password).build()),
+        DEFAULT_MAX_ATTEMPTS,
+        Duration.ofMillis((long) Protocol.DEFAULT_TIMEOUT * DEFAULT_MAX_ATTEMPTS));
   }
 
-  private RedisClusterClient(CommandExecutor commandExecutor, ConnectionProvider connectionProvider, CommandObjects commandObjects, RedisProtocol redisProtocol, Cache cache) {
+  private RedisClusterClient(CommandExecutor commandExecutor, ConnectionProvider connectionProvider,
+      CommandObjects commandObjects, RedisProtocol redisProtocol, Cache cache) {
     super(commandExecutor, connectionProvider, commandObjects, redisProtocol, cache);
   }
 
@@ -70,8 +81,8 @@ public class RedisClusterClient extends UnifiedJedis {
 
     @Override
     protected RedisClusterClient createClient() {
-      return new RedisClusterClient(commandExecutor, connectionProvider, commandObjects, clientConfig.getRedisProtocol(),
-          cache);
+      return new RedisClusterClient(commandExecutor, connectionProvider, commandObjects,
+          clientConfig.getRedisProtocol(), cache);
     }
   }
 
@@ -95,7 +106,8 @@ public class RedisClusterClient extends UnifiedJedis {
   /**
    * Returns the connection for one of the 16,384 slots.
    * @param slot the slot to retrieve the connection for.
-   * @return connection of the provided slot. {@code close()} of this connection must be called after use.
+   * @return connection of the provided slot. {@code close()} of this connection must be called
+   *         after use.
    */
   public Connection getConnectionFromSlot(int slot) {
     return ((ClusterConnectionProvider) provider).getConnectionFromSlot(slot);
@@ -125,7 +137,8 @@ public class RedisClusterClient extends UnifiedJedis {
 
   @Override
   public ClusterPipeline pipelined() {
-    return new ClusterPipeline((ClusterConnectionProvider) provider, (ClusterCommandObjects) commandObjects);
+    return new ClusterPipeline((ClusterConnectionProvider) provider,
+        (ClusterCommandObjects) commandObjects);
   }
 
   /**
@@ -140,9 +153,9 @@ public class RedisClusterClient extends UnifiedJedis {
 
   public final <T> T executeCommandToReplica(CommandObject<T> commandObject) {
     if (!(executor instanceof ClusterCommandExecutor)) {
-      throw new UnsupportedOperationException("Support only execute to replica in ClusterCommandExecutor");
+      throw new UnsupportedOperationException(
+          "Support only execute to replica in ClusterCommandExecutor");
     }
     return ((ClusterCommandExecutor) executor).executeCommandToReplica(commandObject);
   }
 }
-
