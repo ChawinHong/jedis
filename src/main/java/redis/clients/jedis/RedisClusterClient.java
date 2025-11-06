@@ -13,6 +13,32 @@ import redis.clients.jedis.csc.Cache;
 import redis.clients.jedis.providers.ConnectionProvider;
 import redis.clients.jedis.util.JedisClusterCRC16;
 
+/**
+ * RedisClusterClient provides a high-level, unified interface for interacting with a Redis Cluster.
+ * <p>
+ * This class is intended as a modern replacement for the deprecated {@code JedisCluster} class.
+ * It supports all cluster operations and is designed to work seamlessly with the {@link UnifiedJedis}
+ * API, allowing for consistent usage patterns across standalone, sentinel, and cluster deployments.
+ * <p>
+ * <b>Usage:</b>
+ * <pre>{@code
+ * Set<HostAndPort> clusterNodes = new HashSet<>();
+ * clusterNodes.add(new HostAndPort("127.0.0.1", 7000));
+ * RedisClusterClient client = new RedisClusterClient(clusterNodes);
+ * client.set("key", "value");
+ * String value = client.get("key");
+ * }</pre>
+ * <p>
+ * <b>Migration:</b>
+ * Users of {@code JedisCluster} are encouraged to migrate to this class for improved API consistency,
+ * better resource management, and enhanced support for future Redis features.
+ * <p>
+ * <b>Thread-safety:</b>
+ * This client is thread-safe and can be shared across multiple threads.
+ * <p>
+ * <b>Configuration:</b>
+ * Various constructors allow for flexible configuration, including authentication and custom timeouts.
+ */
 public class RedisClusterClient extends UnifiedJedis {
 
   public static final String INIT_NO_ERROR_PROPERTY = "jedis.cluster.initNoError";

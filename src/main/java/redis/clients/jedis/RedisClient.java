@@ -10,6 +10,30 @@ import redis.clients.jedis.providers.PooledConnectionProvider;
 import redis.clients.jedis.util.JedisURIHelper;
 import redis.clients.jedis.util.Pool;
 
+/**
+ * {@code RedisClient} is the recommended client for connecting to standalone Redis deployments.
+ * <p>
+ * This class provides a modern, unified interface for interacting with Redis, supporting
+ * connection pooling, authentication, and configuration via a fluent builder API.
+ * </p>
+ * <p>
+ * {@code RedisClient} supersedes the deprecated {@link JedisPooled} and {@link UnifiedJedis}
+ * classes, offering improved usability and extensibility. For new applications, use
+ * {@code RedisClient} instead of the older classes.
+ * </p>
+ * <p>
+ * Example usage:
+ * <pre>{@code
+ * RedisClient client = RedisClient.builder()
+ *     .host("localhost")
+ *     .port(6379)
+ *     .build();
+ * }</pre>
+ * </p>
+ * <p>
+ * For advanced configuration, see the {@link RedisClient.Builder} class.
+ * </p>
+ */
 public class RedisClient extends UnifiedJedis {
 
   public RedisClient() {
@@ -56,7 +80,7 @@ public class RedisClient extends UnifiedJedis {
    * Obtain an instance via {@link #builder()}.
    * </p>
    */
-  static public class Builder extends StandaloneClientBuilder<RedisClient> {
+  public static class Builder extends StandaloneClientBuilder<RedisClient> {
 
     @Override
     protected RedisClient createClient() {
